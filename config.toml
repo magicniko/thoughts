@@ -2,3 +2,7 @@ baseURL = "https://thoughts.moooo.ooo/"
 languageCode = "en-us"
 title = "might be a cow"
 theme = "neofeed-theme"
+
+[author]
+name = "EJhR6aBuQgMzyKkLkx4GxJ5cKzuZJ6ZNinA4t87DxYJS"
+image = "https://arweave.net/Ehiz4ZP8LROBq9my-e4UT_HoYvKomev-uiNKHtcOSOc"
