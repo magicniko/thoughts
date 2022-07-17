@@ -1,7 +1,7 @@
 baseURL = "https://thoughts.moooo.ooo/"
 languageCode = "en-us"
 title = "might be a cow"
-theme = "PaperMod"
+theme = "mini"
 
 [author]
 name = "EJhR6aBuQgMzyKkLkx4GxJ5cKzuZJ6ZNinA4t87DxYJS"
