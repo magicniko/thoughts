@@ -1,9 +1,0 @@
-[submodule "themes/ananke"]
-	path = themes/ananke
-	url = https://github.com/theNewDynamic/gohugo-theme-ananke.git
-[submodule "themes/terminal"]
-	path = themes/terminal
-	url = https://github.com/panr/hugo-theme-terminal.git
-[submodule "themes/neofeed-theme"]
-	path = themes/neofeed-theme
-	url = https://github.com/victoriadrake/neofeed-theme.git
