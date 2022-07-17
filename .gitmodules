@@ -7,3 +7,6 @@
 [submodule "themes/neofeed-theme"]
 	path = themes/neofeed-theme
 	url = https://github.com/victoriadrake/neofeed-theme.git
+[submodule "themes/PaperMod"]
+	path = themes/PaperMod
+	url = https://github.com/adityatelange/hugo-PaperMod.git
