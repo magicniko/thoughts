@@ -1,0 +1,4 @@
+baseURL = "http://thoughts.moooo.ooo/"
+languageCode = "en-us"
+title = "might be a cow"
+theme = "neofeed-theme"
