@@ -13,3 +13,9 @@
 [submodule "themes/mini"]
 	path = themes/mini
 	url = https://github.com/nodejh/hugo-theme-mini.git
+[submodule "themes/DoIt"]
+	path = themes/DoIt
+	url = https://github.com/HEIGE-PCloud/DoIt.git
+[submodule "themes/hugo-theme-codex"]
+	path = themes/hugo-theme-codex
+	url = https://github.com/jakewies/hugo-theme-codex.git

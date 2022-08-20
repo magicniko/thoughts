@@ -1,8 +1,87 @@
 baseURL = "https://thoughts.moooo.ooo/"
+defaultContentLanguage = "en"
 languageCode = "en-us"
-title = "might be a cow"
-theme = "mini"
+title = "Random"
+theme = "DoIt"
+
+[params]
+  version = "0.2.X"
+  [params.page.toc]
+    enable = true
+    auto = false
+    keepStatic = false
+
+  [params.search]
+    enable = true
+    type = "fuse"
+    contentLength = 4000
+    placeholder = ""
+    maxResultLength = 10
+    snippetLength = 30
+    highlightTag = "em"
+    absoluteURL = false
+    [params.search.fuse]
+      isCaseSensitive = false
+      minMatchCharLength = 2
+      findAllMatches = false
+      location = 0
+      threshold = 0.3
+      distance = 100
+      ignoreLocation = false
+      useExtendedSearch = false
+      ignoreFieldNorm = false
 
 [author]
-name = "EJhR6aBuQgMzyKkLkx4GxJ5cKzuZJ6ZNinA4t87DxYJS"
+name = "🐮🐮🐮"
 image = "https://cdn.farm.moooo.ooo/nft/b67210ece1732555a5c1a6e1710e5621.PNG"
+
+[params.home.profile]
+  enable = true
+  avatarURL = "/images/avatar.png"
+
+[menu]
+  [[menu.main]]
+    identifier = "posts"
+    pre = "💈"
+    post = ""
+    name = "Posts"
+    url = "/posts/"
+    title = "all posts"
+    weight = 1
+  [[menu.main]]
+    identifier = "tags"
+    pre = "🏷️"
+    post = ""
+    name = "Tags"
+    url = "/tags/"
+    title = "find post by tags"
+    weight = 2
+  [[menu.main]]
+    identifier = "categories"
+    pre = "🐱"
+    post = ""
+    name = "Categories"
+    url = "/categories/"
+    title = "find post by category"
+    weight = 3
+
+
+[markup]
+  [markup.highlight]
+    noClasses = false
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+
+
+# Privacy config
+[privacy]
+  [privacy.twitter]
+    enableDNT = true
+  [privacy.youtube]
+    privacyEnhanced = true
+
+[mediaTypes]
+  [mediaTypes."text/plain"]
+    suffixes = ["md"]
