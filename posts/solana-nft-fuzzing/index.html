@@ -1,0 +1,574 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noodp">
+<title class=pjax-title>Solana NFT Fuzzing 1/2 - Random</title><meta name=Description content><meta property="og:title" content="Solana NFT Fuzzing 1/2">
+<meta property="og:description" content="At Magic Eden, one of the things that keeps me awake at night is the possibility that someone found a way to attack our infrastructure using NFT metadata.
+Our backend is comprised of many different services, dedicated to the consolidation of account data, indexing of mints, and the real-time statistical analysis of trading. Our platform is interesting to me because we barely run a CRUD application; all create, update, and delete operations happen &ldquo;elsewhere,&rdquo; and reads are for public activities anyway.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://thoughts.moooo.ooo/posts/solana-nft-fuzzing/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-08-19T23:55:45-06:00">
+<meta property="article:modified_time" content="2022-08-19T23:55:45-06:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Solana NFT Fuzzing 1/2">
+<meta name=twitter:description content="At Magic Eden, one of the things that keeps me awake at night is the possibility that someone found a way to attack our infrastructure using NFT metadata.
+Our backend is comprised of many different services, dedicated to the consolidation of account data, indexing of mints, and the real-time statistical analysis of trading. Our platform is interesting to me because we barely run a CRUD application; all create, update, and delete operations happen &ldquo;elsewhere,&rdquo; and reads are for public activities anyway.">
+<meta name=application-name content="Random">
+<meta name=apple-mobile-web-app-title content="Random">
+<meta name=theme-color content="#f8f8f8"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=canonical href=https://thoughts.moooo.ooo/posts/solana-nft-fuzzing/><link rel=stylesheet href=/lib/normalize/normalize.min.css><link rel=stylesheet href=/css/style.min.css><link rel=preload as=style onload="this.onload=null,this.rel='stylesheet'" href=/lib/fontawesome-free/all.min.css>
+<noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload as=style onload="this.onload=null,this.rel='stylesheet'" href=/lib/animate/animate.min.css>
+<noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Solana NFT Fuzzing 1/2","inLanguage":"en-us","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/thoughts.moooo.ooo\/posts\/solana-nft-fuzzing\/"},"genre":"posts","wordcount":1561,"url":"https:\/\/thoughts.moooo.ooo\/posts\/solana-nft-fuzzing\/","datePublished":"2022-08-19T23:55:45-06:00","dateModified":"2022-08-19T23:55:45-06:00","publisher":{"@type":"Organization","name":"🐮🐮🐮"},"author":{"@type":"Person","name":"🐮🐮🐮"},"description":""}</script></head>
+<body header-desktop header-mobile><script type=text/javascript>function setTheme(a){document.body.setAttribute('theme',a),document.documentElement.style.setProperty('color-scheme',a==='light'?'light':'dark')}function saveTheme(a){window.localStorage&&localStorage.setItem('theme',a)}function getMeta(b){const a=document.getElementsByTagName('meta');for(let c=0;c<a.length;c++)if(a[c].getAttribute('name')===b)return a[c];return''}if(window.localStorage&&localStorage.getItem('theme')){let a=localStorage.getItem('theme');a==='light'||a==='dark'||a==='black'?setTheme(a):window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?setTheme('dark'):setTheme('light')}else''==='light'||''==='dark'||''==='black'?(setTheme(''),saveTheme('')):(saveTheme('auto'),window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?setTheme('dark'):setTheme('light'));let metaColors={light:'#f8f8f8',dark:'#252627',black:'#000000'};getMeta('theme-color').content=metaColors[document.body.getAttribute('theme')]</script>
+<div id=back-to-top></div>
+<div id=mask></div><div class=wrapper><header class=desktop id=header-desktop>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title=Random>Random</a>
+</div>
+<div class=menu>
+<div class=menu-inner><a class=menu-item href=/posts/ title="all posts">💈 Posts </a><a class=menu-item href=/tags/ title="find post by tags">🏷️ Tags </a><a class=menu-item href=/categories/ title="find post by category">🐱 Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder="Search titles or contents..." id=search-input-desktop>
+<a href=# onclick=return!1 class="search-button search-toggle" id=search-toggle-desktop title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=# onclick=return!1 class="search-button search-clear" id=search-clear-desktop title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-desktop>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</span><a href=# onclick=return!1 class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</div>
+</header><header class=mobile id=header-mobile>
+<div class=header-container>
+<div class=header-wrapper>
+<div class=header-title>
+<a href=/ title=Random>Random</a>
+</div>
+<div class=menu-toggle id=menu-toggle-mobile>
+<span></span><span></span><span></span>
+</div>
+</div>
+<div class=menu id=menu-mobile><div class=search-wrapper>
+<div class="search mobile" id=search-mobile>
+<input type=text placeholder="Search titles or contents..." id=search-input-mobile>
+<a href=# onclick=return!1 class="search-button search-toggle" id=search-toggle-mobile title=Search>
+<i class="fas fa-search fa-fw"></i>
+</a>
+<a href=# onclick=return!1 class="search-button search-clear" id=search-clear-mobile title=Clear>
+<i class="fas fa-times-circle fa-fw"></i>
+</a>
+<span class="search-button search-loading" id=search-loading-mobile>
+<i class="fas fa-spinner fa-fw fa-spin"></i>
+</span>
+</div>
+<a href=# onclick=return!1 class=search-cancel id=search-cancel-mobile>
+Cancel
+</a>
+</div><a class=menu-item href=/posts/ title="all posts">💈Posts</a><a class=menu-item href=/tags/ title="find post by tags">🏷️Tags</a><a class=menu-item href=/categories/ title="find post by category">🐱Categories</a><a href=# onclick=return!1 class="menu-item theme-switch" title="Switch Theme">
+<i class="fas fa-adjust fa-fw"></i>
+</a></div>
+</div>
+</header>
+<div class="search-dropdown desktop">
+<div id=search-dropdown-desktop></div>
+</div>
+<div class="search-dropdown mobile">
+<div id=search-dropdown-mobile></div>
+</div>
+<main class=main>
+<div class=container><div class=toc id=toc-auto>
+<h2 class=toc-title>Contents</h2>
+<div class="toc-content always-active" id=toc-content-auto><nav id=TableOfContents>
+<ul>
+<li><a href=#environment-setup>Environment Setup</a></li>
+<li><a href=#media-store-setup>Media Store Setup</a>
+<ul>
+<li><a href=#bucket-creation>Bucket Creation</a></li>
+<li><a href=#bucket-policy>Bucket Policy</a></li>
+<li><a href=#bucket-cors-policy>Bucket CORS Policy</a></li>
+</ul>
+</li>
+<li><a href=#treasury-wallet>Treasury Wallet</a></li>
+<li><a href=#creating-nft-assets>Creating NFT Assets</a>
+<ul>
+<li><a href=#creating-metadata>Creating Metadata</a></li>
+<li><a href=#creating-images>Creating Images</a></li>
+</ul>
+</li>
+<li><a href=#sugar>Sugar</a></li>
+<li><a href=#where-to-go-from-here>Where to Go From Here</a></li>
+</ul>
+</nav></div>
+</div><script>document.getElementsByTagName("main")[0].setAttribute("pageStyle","normal")</script><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC","true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Solana NFT Fuzzing 1/2</h1><div class=post-meta>
+<div class=post-meta-line>
+<span class=post-author><i class="author fas fa-user-circle fa-fw"></i><a href=/ title=Author rel=author class=author>🐮🐮🐮</a>
+</span></div>
+<div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-08-19>2022-08-19</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime=2022-08-19>2022-08-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1561 words&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;8 minutes&nbsp;</div>
+</div><div class="details toc" id=toc-static kept>
+<div class="details-summary toc-title">
+<span>Contents</span>
+<span><i class="details-icon fas fa-angle-right"></i></span>
+</div>
+<div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents>
+<ul>
+<li><a href=#environment-setup>Environment Setup</a></li>
+<li><a href=#media-store-setup>Media Store Setup</a>
+<ul>
+<li><a href=#bucket-creation>Bucket Creation</a></li>
+<li><a href=#bucket-policy>Bucket Policy</a></li>
+<li><a href=#bucket-cors-policy>Bucket CORS Policy</a></li>
+</ul>
+</li>
+<li><a href=#treasury-wallet>Treasury Wallet</a></li>
+<li><a href=#creating-nft-assets>Creating NFT Assets</a>
+<ul>
+<li><a href=#creating-metadata>Creating Metadata</a></li>
+<li><a href=#creating-images>Creating Images</a></li>
+</ul>
+</li>
+<li><a href=#sugar>Sugar</a></li>
+<li><a href=#where-to-go-from-here>Where to Go From Here</a></li>
+</ul>
+</nav></div>
+</div><div class=content id=content><p>At Magic Eden, one of the things that keeps me awake at night is the
+possibility that someone found a way to attack our infrastructure using NFT
+metadata.</p>
+<p>Our backend is comprised of many different services, dedicated to the
+consolidation of account data, indexing of mints, and the real-time statistical
+analysis of trading. Our platform is interesting to me because we barely run a
+CRUD application; all <code>create</code>, <code>update</code>, and <code>delete</code> operations happen
+&ldquo;elsewhere,&rdquo; and <code>reads</code> are for public activities anyway.</p>
+<p>Therefore, our security concerns are slightly different compared to most other
+industries. The entrypoint for much of the data that makes it into our backend
+actually starts in the backend itself - as we index blockchain data. <strong>There is
+nothing equivalent to a WAF in this case</strong> (not really, anyway), we must assess
+the maliciousness of each object as we parse it in our backend applications.
+The attack surface is admittedly huge, and increasingly difficult to secure
+with our small team and big product backlog.</p>
+<p>Part 1 of this series will cover how to set up an NFT collection for the
+purposes of assessing the backend and frontend security of NFT marketplaces,
+and adjacent projects.</p>
+<p>Part 2 will focus on the attacks themselves and mitigations.</p>
+<h2 id=environment-setup class=headerLink>
+<a href=#environment-setup class=header-mark></a>Environment Setup</h2><div class="details admonition tip">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-lightbulb fa-fw"></i>Installing Solana CLI<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content><p>Copy paste these commands, it will extract solana in your home directory.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text>cd ~/
+wget https://github.com/solana-labs/solana/releases/download/v1.10.35/solana-release-x86_64-unknown-linux-gnu.tar.bz2 -O solana-v1.10.35.tar.bz2
+tar xf solana-v1.10.35.tar.bz2
+</code></pre></div></div>
+</div>
+</div>
+<p>Ensure you have a solana release installed; change the paths in this guide or
+expand the box for some advice on how to exactly replicate my environment.</p>
+<p>This guide assumes you&rsquo;re operating from a new directory such as
+<code>~/mint-example/</code>, and that the solana binary is available at
+<code>~/solana-release/bin/solana</code></p>
+<p>Solana releases can be found <a href=https://github.com/solana-labs/solana/releases target=_blank rel="noopener noreffer">in Github</a></p>
+<p>You will also need Metaplex&rsquo;s <code>sugar</code> CLI tool for deploying the smart contract
+you&rsquo;ll use for minting. <a href=https://github.com/metaplex-foundation/sugar target=_blank rel="noopener noreffer">Source code can be found
+here</a>. Sugar replaces the
+deprecated metaplex CLI, which is what people used to use to create mints in
+Solana.</p>
+<div class="details admonition tip">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-lightbulb fa-fw"></i>Installing Sugar CLI<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content><p>You can grab the metaplex sugar release directly from Github, or use this handy
+but insecure shell command:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text>bash &lt;(curl -sSf https://sugar.metaplex.com/install.sh)
+</code></pre></div></div>
+</div>
+</div>
+<p>To use the python script below, you can use a virtualenv as depicted in the
+tooltip. The python script is used to generate the NFT asset metadata, Sugar
+config, and collection configuration.</p>
+<div class="details admonition tip">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-lightbulb fa-fw"></i>Python venv setup<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content><p>This is only required if you want to run the python script below for generating
+NFT metadata. If you want to copy paste the example configurations, you can
+ignore this.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text>python -m venv v
+source v/bin/activate
+pip install faker
+</code></pre></div></div>
+</div>
+</div>
+<h2 id=media-store-setup class=headerLink>
+<a href=#media-store-setup class=header-mark></a>Media Store Setup</h2><div class="details admonition tip open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-lightbulb fa-fw"></i>AWS S3 Setup<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content>This guide assumes you already have an AWS account with access to create and configure S3 buckets.</div>
+</div>
+</div>
+<p>In order to create an NFT collection that we can use to maniupulate clients, we
+need a place for the NFT media assets to live. Create an S3 bucket that can
+serve files to the public internet.</p>
+<p>We&rsquo;ll use a randomly named bucket, and save it to the <code>$bucket</code> variable in our shell.</p>
+<h3 id=bucket-creation class=headerLink>
+<a href=#bucket-creation class=header-mark></a>Bucket Creation</h3><div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text>bucket=$(uuidgen)
+aws s3api create-bucket --acl public-read --bucket $bucket
+</code></pre></div><h3 id=bucket-policy class=headerLink>
+<a href=#bucket-policy class=header-mark></a>Bucket Policy</h3><p>Next, create a bucket policy that allows any client to GetObject; note that
+this is generally an insecure configuration unless you intend to do exactly
+this - serve assets to the public internet.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text>aws s3api put-bucket-policy --bucket $bucket --policy &#39;{
+  &#34;Version&#34;: &#34;2012-10-17&#34;,
+  &#34;Statement&#34;: [
+    {
+      &#34;Effect&#34;: &#34;Allow&#34;,
+      &#34;Principal&#34;: &#34;*&#34;,
+      &#34;Action&#34;: [
+        &#34;s3:GetObject&#34;
+      ],
+      &#34;Resource&#34;: &#34;arn:aws:s3:::&#39;${bucket}&#39;/*&#34;
+    }
+  ]
+}&#39;
+</code></pre></div><h3 id=bucket-cors-policy class=headerLink>
+<a href=#bucket-cors-policy class=header-mark></a>Bucket CORS Policy</h3><p>Now, create a CORS configuration which will allow our assets to be included by
+any website.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text>aws s3api put-bucket-cors --bucket $bucket --cors-configuration &#39;{
+  &#34;CORSRules&#34;: [
+    {
+      &#34;AllowedOrigins&#34;: [&#34;*&#34;],
+      &#34;AllowedHeaders&#34;: [&#34;*&#34;],
+      &#34;AllowedMethods&#34;: [&#34;GET&#34;, &#34;HEAD&#34;],
+      &#34;MaxAgeSeconds&#34;: 30
+    }
+  ]
+}&#39;
+</code></pre></div><h2 id=treasury-wallet class=headerLink>
+<a href=#treasury-wallet class=header-mark></a>Treasury Wallet</h2><p>Be sure to back up your solana configuration if you&rsquo;ve used it before, or have
+paper wallets.</p>
+<div class="details admonition danger">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-skull-crossbones fa-fw"></i>Backup/Restore Instructions<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content><p>If you&rsquo;ve used solana CLI before, and have run <code>set</code> commands, the following
+commands will overwrite those settings. You can back your current configuration
+up like so:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text>cp -r ~/.config/solana{,-bak}
+</code></pre></div><p>If you need to restore, you can do it like this:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text>rm -rf ~/.config/solana/
+mv ~/.config/solana-bak ~/.config/solana
+</code></pre></div></div>
+</div>
+</div>
+<p>First, point solana CLI at devnet:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text>~/solana-release/bin/solana config set --url devnet
+</code></pre></div><p>Next, create a wallet, <strong>it&rsquo;s a good idea to capture the output</strong> from this
+command somewhere in your notes. (remember, we&rsquo;re running these commands from
+<code>~/mint-example/</code>)</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text>~/solana-release/bin/solana-keygen new --outfile wallet.json --no-bip39-passphrase
+</code></pre></div><p>set the <code>$wallet</code> env var in your shell for later use:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text>export wallet=&lt;the value you see in the output for pubkey:&gt;
+</code></pre></div><p>Make solana CLI use this wallet by default from now on:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text>~/solana-release/bin/solana config set --keypair $(pwd)/wallet.json
+</code></pre></div><p>Finally, give this wallet some SOL.</p>
+<div class="details admonition tip open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-lightbulb fa-fw"></i>Mainnet-Beta Wallet<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content>If testing in mainnet-beta, you&rsquo;ll need to fund the wallet yourself at this
+point rather than requesting an airdrop.</div>
+</div>
+</div>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text>~/solana-release/bin/solana airdrop 2
+</code></pre></div><p>Be sure to save the wallet address in <code>$wallet</code></p>
+<h2 id=creating-nft-assets class=headerLink>
+<a href=#creating-nft-assets class=header-mark></a>Creating NFT Assets</h2><p>We aren&rsquo;t creating art here; well, not really. Our NFTs don&rsquo;t have to be cool
+beacuse no one will ever buy them. We <em>do</em> want NFT marketpalces to list our
+assets though, should we ever find ourselves in posession of a useful exploit.</p>
+<p>There are several files that are required for <code>sugar</code> to work:</p>
+<ul>
+<li><code>./config.json</code></li>
+<li><code>./assets/0.json</code></li>
+<li><code>./assets/0.png</code> - etc.</li>
+</ul>
+<p>Create a directory called <code>./assets/</code>,</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text>mkdir -p assets
+</code></pre></div><h3 id=creating-metadata class=headerLink>
+<a href=#creating-metadata class=header-mark></a>Creating Metadata</h3><p>we&rsquo;ll fill this directory with images in a minute, but first, run this python
+script in order to generate the metadatas we&rsquo;ll be using to fuzz clients with.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=ch>#!/usr/bin/env python</span>
+<span class=kn>from</span> <span class=nn>faker</span> <span class=kn>import</span> <span class=n>Faker</span>
+<span class=kn>import</span> <span class=nn>sys</span>
+<span class=kn>import</span> <span class=nn>json</span>
+<span class=n>fake</span> <span class=o>=</span> <span class=n>Faker</span><span class=p>()</span>
+<span class=n>Faker</span><span class=o>.</span><span class=n>seed</span><span class=p>(</span><span class=mi>23590</span><span class=p>)</span> <span class=c1># change this to whatever you want, or remove it</span>
+<span class=n>count</span> <span class=o>=</span> <span class=mi>10</span>
+<span class=n>symbol</span> <span class=o>=</span> <span class=n>fake</span><span class=o>.</span><span class=n>first_name_nonbinary</span><span class=p>()</span><span class=o>.</span><span class=n>upper</span><span class=p>()</span>
+<span class=n>collection_name</span> <span class=o>=</span> <span class=n>fake</span><span class=o>.</span><span class=n>company</span><span class=p>()</span>
+<span class=n>bucket</span> <span class=o>=</span> <span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span>
+<span class=n>wallet</span> <span class=o>=</span> <span class=n>sys</span><span class=o>.</span><span class=n>argv</span><span class=p>[</span><span class=mi>2</span><span class=p>]</span>
+<span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>count</span><span class=p>):</span>
+    <span class=n>metadata</span> <span class=o>=</span> <span class=p>{</span>
+      <span class=s2>&#34;name&#34;</span><span class=p>:</span> <span class=sa>f</span><span class=s2>&#34;</span><span class=si>{</span><span class=n>fake</span><span class=o>.</span><span class=n>pystr</span><span class=p>()</span><span class=si>}</span><span class=s2> #</span><span class=si>{</span><span class=n>fake</span><span class=o>.</span><span class=n>ean</span><span class=p>(</span><span class=n>length</span><span class=o>=</span><span class=mi>8</span><span class=p>)</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>,</span>
+      <span class=s2>&#34;symbol&#34;</span><span class=p>:</span> <span class=sa>f</span><span class=s2>&#34;</span><span class=si>{</span><span class=n>symbol</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>,</span>
+      <span class=s2>&#34;description&#34;</span><span class=p>:</span> <span class=sa>f</span><span class=s2>&#34;</span><span class=si>{</span><span class=n>fake</span><span class=o>.</span><span class=n>paragraph</span><span class=p>(</span><span class=n>nb_sentences</span><span class=o>=</span><span class=mi>1</span><span class=p>)</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>,</span>
+      <span class=s2>&#34;image&#34;</span><span class=p>:</span> <span class=sa>f</span><span class=s2>&#34;</span><span class=si>{</span><span class=n>i</span><span class=si>}</span><span class=s2>.png&#34;</span><span class=p>,</span>
+      <span class=s2>&#34;attributes&#34;</span><span class=p>:</span> <span class=p>[</span>
+          <span class=p>{</span>
+              <span class=s2>&#34;trait_type&#34;</span><span class=p>:</span> <span class=s2>&#34;bs&#34;</span><span class=p>,</span>
+              <span class=s2>&#34;value&#34;</span><span class=p>:</span> <span class=n>fake</span><span class=o>.</span><span class=n>bs</span><span class=p>()</span>
+          <span class=p>},</span>
+          <span class=p>{</span>
+              <span class=s2>&#34;trait_type&#34;</span><span class=p>:</span> <span class=s2>&#34;Catchphrase&#34;</span><span class=p>,</span>
+              <span class=s2>&#34;value&#34;</span><span class=p>:</span> <span class=n>fake</span><span class=o>.</span><span class=n>catch_phrase</span><span class=p>()</span>
+          <span class=p>}</span>
+      <span class=p>],</span>
+      <span class=s2>&#34;properties&#34;</span><span class=p>:</span> <span class=p>{</span>
+        <span class=s2>&#34;files&#34;</span><span class=p>:</span> <span class=p>[</span>
+          <span class=p>{</span>
+            <span class=s2>&#34;uri&#34;</span><span class=p>:</span> <span class=sa>f</span><span class=s2>&#34;</span><span class=si>{</span><span class=n>i</span><span class=si>}</span><span class=s2>.png&#34;</span><span class=p>,</span>
+            <span class=s2>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;image/png&#34;</span>
+          <span class=p>}</span>
+        <span class=p>]</span>
+      <span class=p>}</span>
+    <span class=p>}</span>
+    <span class=k>with</span> <span class=nb>open</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;./assets/</span><span class=si>{</span><span class=n>i</span><span class=si>}</span><span class=s2>.json&#34;</span><span class=p>,</span> <span class=s2>&#34;w&#34;</span><span class=p>)</span> <span class=k>as</span> <span class=n>fd</span><span class=p>:</span>
+      <span class=n>fd</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=n>json</span><span class=o>.</span><span class=n>dumps</span><span class=p>(</span><span class=n>metadata</span><span class=p>,</span> <span class=n>indent</span><span class=o>=</span><span class=mi>4</span><span class=p>))</span>
+    <span class=nb>print</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;assets/</span><span class=si>{</span><span class=n>i</span><span class=si>}</span><span class=s2>.json done&#34;</span><span class=p>)</span>
+
+<span class=n>collection</span> <span class=o>=</span> <span class=p>{</span>
+  <span class=s2>&#34;name&#34;</span><span class=p>:</span> <span class=sa>f</span><span class=s2>&#34;</span><span class=si>{</span><span class=n>collection_name</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>,</span>
+  <span class=s2>&#34;symbol&#34;</span><span class=p>:</span> <span class=sa>f</span><span class=s2>&#34;</span><span class=si>{</span><span class=n>symbol</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>,</span>
+  <span class=s2>&#34;description&#34;</span><span class=p>:</span> <span class=sa>f</span><span class=s2>&#34;</span><span class=si>{</span><span class=n>fake</span><span class=o>.</span><span class=n>catch_phrase</span><span class=p>()</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>,</span>
+  <span class=s2>&#34;image&#34;</span><span class=p>:</span> <span class=s2>&#34;collection.png&#34;</span><span class=p>,</span>
+  <span class=s2>&#34;attributes&#34;</span><span class=p>:</span> <span class=p>[],</span>
+  <span class=s2>&#34;properties&#34;</span><span class=p>:</span> <span class=p>{</span>
+    <span class=s2>&#34;files&#34;</span><span class=p>:</span> <span class=p>[</span>
+      <span class=p>{</span>
+        <span class=s2>&#34;uri&#34;</span><span class=p>:</span> <span class=s2>&#34;collection.png&#34;</span><span class=p>,</span>
+        <span class=s2>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;image/png&#34;</span>
+      <span class=p>}</span>
+    <span class=p>]</span>
+  <span class=p>}</span>
+<span class=p>}</span>
+<span class=k>with</span> <span class=nb>open</span><span class=p>(</span><span class=s2>&#34;./assets/collection.json&#34;</span><span class=p>,</span> <span class=s2>&#34;w&#34;</span><span class=p>)</span> <span class=k>as</span> <span class=n>fd</span><span class=p>:</span>
+  <span class=n>fd</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=n>json</span><span class=o>.</span><span class=n>dumps</span><span class=p>(</span><span class=n>collection</span><span class=p>,</span> <span class=n>indent</span><span class=o>=</span><span class=mi>4</span><span class=p>))</span>
+<span class=nb>print</span><span class=p>(</span><span class=s2>&#34;assets/collection.json done&#34;</span><span class=p>)</span>
+<span class=n>config</span> <span class=o>=</span> <span class=p>{</span>
+  <span class=s2>&#34;price&#34;</span><span class=p>:</span> <span class=mf>1.0</span><span class=p>,</span>
+  <span class=s2>&#34;number&#34;</span><span class=p>:</span> <span class=mi>10</span><span class=p>,</span>
+  <span class=s2>&#34;gatekeeper&#34;</span><span class=p>:</span> <span class=kc>None</span><span class=p>,</span>
+  <span class=s2>&#34;creators&#34;</span><span class=p>:</span> <span class=p>[</span>
+    <span class=p>{</span>
+      <span class=s2>&#34;address&#34;</span><span class=p>:</span> <span class=sa>f</span><span class=s2>&#34;</span><span class=si>{</span><span class=n>wallet</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>,</span>
+      <span class=s2>&#34;share&#34;</span><span class=p>:</span> <span class=mi>100</span>
+    <span class=p>}</span>
+  <span class=p>],</span>
+  <span class=s2>&#34;solTreasuryAccount&#34;</span><span class=p>:</span> <span class=sa>f</span><span class=s2>&#34;</span><span class=si>{</span><span class=n>wallet</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>,</span>
+  <span class=s2>&#34;splTokenAccount&#34;</span><span class=p>:</span> <span class=kc>None</span><span class=p>,</span>
+  <span class=s2>&#34;splToken&#34;</span><span class=p>:</span> <span class=kc>None</span><span class=p>,</span>
+  <span class=s2>&#34;goLiveDate&#34;</span><span class=p>:</span> <span class=s2>&#34;1 Jan 2020 00:00:00 +0000&#34;</span><span class=p>,</span>
+  <span class=s2>&#34;endSettings&#34;</span><span class=p>:</span> <span class=kc>None</span><span class=p>,</span>
+  <span class=s2>&#34;whitelistMintSettings&#34;</span><span class=p>:</span> <span class=kc>None</span><span class=p>,</span>
+  <span class=s2>&#34;hiddenSettings&#34;</span><span class=p>:</span> <span class=kc>None</span><span class=p>,</span>
+  <span class=s2>&#34;uploadMethod&#34;</span><span class=p>:</span> <span class=s2>&#34;aws&#34;</span><span class=p>,</span>
+  <span class=s2>&#34;retainAuthority&#34;</span><span class=p>:</span> <span class=kc>True</span><span class=p>,</span>
+  <span class=s2>&#34;isMutable&#34;</span><span class=p>:</span> <span class=kc>True</span><span class=p>,</span>
+  <span class=s2>&#34;symbol&#34;</span><span class=p>:</span> <span class=sa>f</span><span class=s2>&#34;</span><span class=si>{</span><span class=n>symbol</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>,</span>
+  <span class=s2>&#34;sellerFeeBasisPoints&#34;</span><span class=p>:</span> <span class=mi>0</span><span class=p>,</span>
+  <span class=s2>&#34;awsS3Bucket&#34;</span><span class=p>:</span> <span class=sa>f</span><span class=s2>&#34;</span><span class=si>{</span><span class=n>bucket</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>,</span>
+  <span class=s2>&#34;nftStorageAuthToken&#34;</span><span class=p>:</span> <span class=kc>None</span><span class=p>,</span>
+  <span class=s2>&#34;shdwStorageAccount&#34;</span><span class=p>:</span> <span class=kc>None</span>
+<span class=p>}</span>
+<span class=k>with</span> <span class=nb>open</span><span class=p>(</span><span class=s2>&#34;config.json&#34;</span><span class=p>,</span> <span class=s2>&#34;w&#34;</span><span class=p>)</span> <span class=k>as</span> <span class=n>fd</span><span class=p>:</span>
+  <span class=n>fd</span><span class=o>.</span><span class=n>write</span><span class=p>(</span><span class=n>json</span><span class=o>.</span><span class=n>dumps</span><span class=p>(</span><span class=n>config</span><span class=p>,</span> <span class=n>indent</span><span class=o>=</span><span class=mi>4</span><span class=p>))</span>
+<span class=nb>print</span><span class=p>(</span><span class=s2>&#34;config.json done&#34;</span><span class=p>)</span>
+</code></pre></div><p>Run this script, it will generate all the necessary metadata files.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text>python generate-metadata.py $bucket $wallet
+</code></pre></div><p>If you don&rsquo;t want to run the python script, create a the following jsons
+manually; be sure to look closely at each file and make changes where
+necessary.</p>
+<ul>
+<li><code>./assets/1.json</code></li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=p>{</span>
+    <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;kcnuqhEwgFRvtYqhIxpa #36774050&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;symbol&#34;</span><span class=p>:</span> <span class=s2>&#34;TODD&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;description&#34;</span><span class=p>:</span> <span class=s2>&#34;Grow church learn election piece culture.&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;image&#34;</span><span class=p>:</span> <span class=s2>&#34;1.png&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;attributes&#34;</span><span class=p>:</span> <span class=p>[</span>
+        <span class=p>{</span>
+            <span class=nt>&#34;trait_type&#34;</span><span class=p>:</span> <span class=s2>&#34;bs&#34;</span><span class=p>,</span>
+            <span class=nt>&#34;value&#34;</span><span class=p>:</span> <span class=s2>&#34;evolve mission-critical networks&#34;</span>
+        <span class=p>},</span>
+        <span class=p>{</span>
+            <span class=nt>&#34;trait_type&#34;</span><span class=p>:</span> <span class=s2>&#34;Catchphrase&#34;</span><span class=p>,</span>
+            <span class=nt>&#34;value&#34;</span><span class=p>:</span> <span class=s2>&#34;Profound secondary task-force&#34;</span>
+        <span class=p>}</span>
+    <span class=p>],</span>
+    <span class=nt>&#34;properties&#34;</span><span class=p>:</span> <span class=p>{</span>
+        <span class=nt>&#34;files&#34;</span><span class=p>:</span> <span class=p>[</span>
+            <span class=p>{</span>
+                <span class=nt>&#34;uri&#34;</span><span class=p>:</span> <span class=s2>&#34;1.png&#34;</span><span class=p>,</span>
+                <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;image/png&#34;</span>
+            <span class=p>}</span>
+        <span class=p>]</span>
+    <span class=p>}</span>
+<span class=p>}</span>
+</code></pre></div><ul>
+<li><code>./assets/collection.json</code></li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=p>{</span>
+    <span class=nt>&#34;name&#34;</span><span class=p>:</span> <span class=s2>&#34;Alexander, Gomez and Klein&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;symbol&#34;</span><span class=p>:</span> <span class=s2>&#34;TODD&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;description&#34;</span><span class=p>:</span> <span class=s2>&#34;Centralized 24hour customer loyalty&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;image&#34;</span><span class=p>:</span> <span class=s2>&#34;collection.png&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;attributes&#34;</span><span class=p>:</span> <span class=p>[],</span>
+    <span class=nt>&#34;properties&#34;</span><span class=p>:</span> <span class=p>{</span>
+        <span class=nt>&#34;files&#34;</span><span class=p>:</span> <span class=p>[</span>
+            <span class=p>{</span>
+                <span class=nt>&#34;uri&#34;</span><span class=p>:</span> <span class=s2>&#34;collection.png&#34;</span><span class=p>,</span>
+                <span class=nt>&#34;type&#34;</span><span class=p>:</span> <span class=s2>&#34;image/png&#34;</span>
+            <span class=p>}</span>
+        <span class=p>]</span>
+    <span class=p>}</span>
+<span class=p>}</span>
+</code></pre></div><ul>
+<li><code>./config.json</code></li>
+</ul>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-json data-lang=json><span class=p>{</span>
+    <span class=nt>&#34;price&#34;</span><span class=p>:</span> <span class=mf>1.0</span><span class=p>,</span>
+    <span class=nt>&#34;number&#34;</span><span class=p>:</span> <span class=mi>10</span><span class=p>,</span>
+    <span class=nt>&#34;gatekeeper&#34;</span><span class=p>:</span> <span class=kc>null</span><span class=p>,</span>
+    <span class=nt>&#34;creators&#34;</span><span class=p>:</span> <span class=p>[</span>
+        <span class=p>{</span>
+            <span class=nt>&#34;address&#34;</span><span class=p>:</span> <span class=s2>&#34;PUT_YOUR_TREASURY_WALLET_PUBKEY_HERE&#34;</span><span class=p>,</span>
+            <span class=nt>&#34;share&#34;</span><span class=p>:</span> <span class=mi>100</span>
+        <span class=p>}</span>
+    <span class=p>],</span>
+    <span class=nt>&#34;solTreasuryAccount&#34;</span><span class=p>:</span> <span class=s2>&#34;PUT_YOUR_TREASURY_WALLET_PUBKEY_HERE&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;splTokenAccount&#34;</span><span class=p>:</span> <span class=kc>null</span><span class=p>,</span>
+    <span class=nt>&#34;splToken&#34;</span><span class=p>:</span> <span class=kc>null</span><span class=p>,</span>
+    <span class=nt>&#34;goLiveDate&#34;</span><span class=p>:</span> <span class=s2>&#34;1 Jan 2020 00:00:00 +0000&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;endSettings&#34;</span><span class=p>:</span> <span class=kc>null</span><span class=p>,</span>
+    <span class=nt>&#34;whitelistMintSettings&#34;</span><span class=p>:</span> <span class=kc>null</span><span class=p>,</span>
+    <span class=nt>&#34;hiddenSettings&#34;</span><span class=p>:</span> <span class=kc>null</span><span class=p>,</span>
+    <span class=nt>&#34;uploadMethod&#34;</span><span class=p>:</span> <span class=s2>&#34;aws&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;retainAuthority&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+    <span class=nt>&#34;isMutable&#34;</span><span class=p>:</span> <span class=kc>true</span><span class=p>,</span>
+    <span class=nt>&#34;symbol&#34;</span><span class=p>:</span> <span class=s2>&#34;TODD&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;sellerFeeBasisPoints&#34;</span><span class=p>:</span> <span class=mi>0</span><span class=p>,</span>
+    <span class=nt>&#34;awsS3Bucket&#34;</span><span class=p>:</span> <span class=s2>&#34;PUT_YOUR_BUCKET_NAME_HERE&#34;</span><span class=p>,</span>
+    <span class=nt>&#34;nftStorageAuthToken&#34;</span><span class=p>:</span> <span class=kc>null</span><span class=p>,</span>
+    <span class=nt>&#34;shdwStorageAccount&#34;</span><span class=p>:</span> <span class=kc>null</span>
+<span class=p>}</span>
+</code></pre></div><h3 id=creating-images class=headerLink>
+<a href=#creating-images class=header-mark></a>Creating Images</h3><p>Now make some images. I&rsquo;ll use <code>magick</code> to generate random images, the tool can
+be found <a href=https://imagemagick.org/index.php target=_blank rel="noopener noreffer">here</a>, available to all linux
+distros, and probably in brew on Macos.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text>cd assets
+for i in {0..10}; do magick -size 1000x1000 xc: -modulate 300,50,50 +noise Random ${i}.png; done
+magick -size 1000x1000 xc: -modulate 300,50,50 +noise Random collection.png
+cd ../
+</code></pre></div><div class="details admonition danger open">
+<div class="details-summary admonition-title">
+<i class="icon fas fa-skull-crossbones fa-fw"></i>Do Evil<i class="details-icon fas fa-angle-right fa-fw"></i>
+</div>
+<div class=details-content>
+<div class=admonition-content>This is the point at which we would make modifications to the collection to include our code injection attempts, malicious images, canary tokens, etc. A guide for that will take place in the next post.</div>
+</div>
+</div>
+<p>Finally, sync all assets to S3:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text>aws s3 sync assets/ s3://${bucket}/
+</code></pre></div><h2 id=sugar class=headerLink>
+<a href=#sugar class=header-mark></a>Sugar</h2><p>After all this, you&rsquo;re ready to run <code>sugar</code>, which will do all the legwork for
+making your NFTs tradeable.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text>sugar launch
+</code></pre></div><p>Now your assets are uploaded, visible on solana.fm, solscan, etc, and ready to
+be minted. For example, create a phantom wallet on devnet and mint the tokens
+to it:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text>sugar mint --receiver $phantom_wallet --number 2
+</code></pre></div><p>You can see the tokens in the wallet</p>
+<figure><img src=/devnet-wallet-1.png>
+</figure>
+<p>viewing an asset (which must be done in order to send it to the trash) triggers
+an HTTP call directly to the NFT asset. This creates an HTTP access log which
+can be used to track the user of the wallet&rsquo;s behavior. If they burn the NFT
+you sent them, send another to an active wallet.</p>
+<figure><img src=/devnet-wallet-2.png>
+</figure>
+<p>You can also view the mints on Magic Eden, by going directly to the devnet
+wallet (in devnet mode)</p>
+<figure><img src=/devnet-wallet-3.png>
+</figure>
+<p>Unfortunately (or fortunately) Magic Eden&rsquo;s image proxy will obfuscate the
+viewer&rsquo;s IP address, but it is possible to work around that by making the
+webserver artifically slow, which will be covered in the next post.</p>
+<figure><img src=/devnet-wallet-4.png>
+</figure>
+<h2 id=where-to-go-from-here class=headerLink>
+<a href=#where-to-go-from-here class=header-mark></a>Where to Go From Here</h2><p>Next post will follow up on:</p>
+<ul>
+<li>XSS vectors</li>
+<li>DoS vectors</li>
+<li>Code injection via metadata fields</li>
+<li>Canary tokens</li>
+<li>Attacking web3 infrastructure clients</li>
+</ul>
+<p>Thanks for reading!</p>
+</div>
+<div class=post-footer id=post-footer>
+<div class=post-info>
+<div class=post-info-line>
+<div class=post-info-mod>
+<span>Updated on 2022-08-19</span>
+</div>
+<div class=post-info-license></div>
+</div>
+<div class=post-info-line>
+<div class=post-info-md></div>
+<div class=post-info-share>
+<span></span>
+</div>
+</div>
+</div>
+<div class=post-info-more>
+<section class=post-tags></section>
+<section>
+<span><a href=javascript:void(0); onclick=window.history.back()>Back</a></span>&nbsp;|&nbsp;<span><a href=/>Home</a></span>
+</section>
+</div>
+<div class=post-nav></div>
+</div>
+</article></div>
+</main><footer class=footer>
+<div class=footer-container><div class=footer-line>
+Powered by <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.91.2">Hugo</a>&nbsp;|&nbsp;Theme - <a href=https://github.com/HEIGE-PCloud/DoIt target=_blank rel="noopener noreffer" title="DoIt 0.2.13"><i class="far fa-edit fa-fw"></i> DoIt</a>
+</div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/ target=_blank rel="noopener noreferrer">🐮🐮🐮</a></span></div>
+<div class=footer-line></div>
+<div class=footer-line>
+</div>
+</div></footer></div>
+<div id=fixed-buttons><a href=#back-to-top id=back-to-top-button class=fixed-button title="Back to Top">
+<i class="fas fa-arrow-up fa-fw"></i>
+</a><a href=# id=view-comments class=fixed-button title="View Comments">
+<i class="fas fa-comment fa-fw"></i>
+</a>
+</div><div class=assets><script type=text/javascript src=/lib/autocomplete/autocomplete.min.js></script><script type=text/javascript src=/lib/fuse/fuse.min.js></script><script type=text/javascript src=/lib/lazysizes/lazysizes.min.js></script><script type=text/javascript src=/lib/topbar/topbar.min.js></script><script type=text/javascript src=/lib/pjax/pjax.min.js></script><script type=text/javascript src=/js/theme.min.js defer></script></div>
+<div class=pjax-assets><script type=text/javascript>window.config={code:{copyTitle:"Copy to clipboard",maxShownLines:10},comment:{},search:{distance:100,findAllMatches:!1,fuseIndexURL:"/index.json",highlightTag:"em",ignoreFieldNorm:!1,ignoreLocation:!1,isCaseSensitive:!1,location:0,maxResultLength:10,minMatchCharLength:2,noResultsFound:"No results found",snippetLength:30,threshold:.3,type:"fuse",useExtendedSearch:!1}}</script><script type=text/javascript src=/lib/clipboard/clipboard.min.js></script></div>
+</body>
+</html>
